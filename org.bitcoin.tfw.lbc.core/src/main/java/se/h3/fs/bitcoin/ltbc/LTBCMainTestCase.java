@@ -58,6 +58,5 @@ public class LTBCMainTestCase extends LTBCTestCase {
 	@After
 	public void teardown() {
 		tbc.stopDeaomn();
-
 	}
 }

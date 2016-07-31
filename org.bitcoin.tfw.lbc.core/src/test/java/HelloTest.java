@@ -9,7 +9,7 @@ import se.h3.fs.bitcoin.ltbc.LTBCMainTestCase;
 
 public class HelloTest extends LTBCMainTestCase {
 
-//	@Test
+	@Test
 	public void testName() throws Exception {
 		
 		WalletAppKit kit = new WalletAppKit(RegTestParams.get(), Files
@@ -27,11 +27,5 @@ public class HelloTest extends LTBCMainTestCase {
 		this.tbc.mine(6);
 
 		System.out.println(kit.wallet().getBalance());
-		
-		
-		
-		
-		
-		
 	}
 }

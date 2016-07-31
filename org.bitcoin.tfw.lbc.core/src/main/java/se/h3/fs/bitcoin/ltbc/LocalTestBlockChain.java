@@ -29,10 +29,9 @@ public class LocalTestBlockChain {
 
 		try {
 			Path td = Files.createTempDirectory("lbct");
-			
+
 			final String cn = "bitcoin.conf";
 			Path cp = td.resolve(cn);
-			
 
 			String os = System.getProperty("os.name");
 			String archProp = System.getProperty("os.arch");
@@ -40,14 +39,14 @@ public class LocalTestBlockChain {
 			String conf = " -datadir=" + td + " -conf=" + cp + " -regtest ";
 			String dfn = null;
 			String cfn = null;
-			
+
 			Path ar = null;
 
 			if (os.startsWith("Windows")) {
 				ar = Paths.get("bin", "bitcoin-0.9.3-win").resolve(archProp);
 				dfn = "bitcoind.exe";
 				cfn = "bitcoin-cli.exe";
-				
+
 			} else if (os.startsWith("Linux")) {
 
 				ar = Paths.get("bin", "bitcoin-0.9.3-linux").resolve(archProp);
@@ -64,23 +63,19 @@ public class LocalTestBlockChain {
 			// + conf);
 			// }
 
-
-			Files.copy(Thread.currentThread().getContextClassLoader()
-					.getResourceAsStream(cn),
-					cp,
+			Files.copy(Thread.currentThread().getContextClassLoader().getResourceAsStream(cn), cp,
 					StandardCopyOption.REPLACE_EXISTING);
 
 			for (String s : new String[] { dfn, cfn }) {
 				Path path = td.resolve(s);
-				Files.copy(Thread.currentThread().getContextClassLoader()
-						.getResourceAsStream(ar.resolve(s).toString()), path,
-						StandardCopyOption.REPLACE_EXISTING);
-				
+				Files.copy(Thread.currentThread().getContextClassLoader().getResourceAsStream(ar.resolve(s).toString()),
+						path, StandardCopyOption.REPLACE_EXISTING);
+
 				path.toFile().setExecutable(true);
 			}
 
 			profile = new SystemProfile(td.resolve(dfn) + conf, td.resolve(cfn) + conf);
-			
+
 			System.out.println(td);
 
 			// Files.copy(Thread.currentThread().getContextClassLoader()
@@ -98,20 +93,47 @@ public class LocalTestBlockChain {
 		}
 	}
 
+	private boolean keepAlive = false;
+
 	public void startDeamon() {
 		try {
+			keepAlive = true;
 			deamon = Runtime.getRuntime().exec(profile.deamon);
 
-			if (deamon.isAlive()) {
-				System.out.println("Deamon is live");
-			}
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						if (!deamon.isAlive()) {
+							System.out.println("Deamon is live");
+						}
+						
+						int ret = deamon.waitFor();
+						if(keepAlive) {
+							throw new RuntimeException("Deamon dead while keepAlive set to true, exitcode: " + ret);
+						}
+					} catch (InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+					
+				}
+			}).start();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void stopDeaomn() {
+		keepAlive = false;
 		deamon.destroy();
+		try {
+			deamon.waitFor();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	void cli_call(String call) {
@@ -136,7 +158,7 @@ public class LocalTestBlockChain {
 	public void sendto(String addr, double val) {
 		cli_call("sendtoaddress " + addr + " " + val);
 	}
-	
+
 	public void sendto(Address addr, double val) {
 		cli_call("sendtoaddress " + addr + " " + val);
 	}
