@@ -1,4 +1,4 @@
-package se.h3.fs.bitcoin.ltbc;
+package org.bitcoin.tfw.lbc;
 
 public class LTBCTestCase {
 

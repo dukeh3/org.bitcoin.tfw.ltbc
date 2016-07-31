@@ -1,4 +1,4 @@
-package se.h3.fs.bitcoin.ltbc;
+package org.bitcoin.tfw.lbc;
 
 import java.io.File;
 import java.io.FileNotFoundException;

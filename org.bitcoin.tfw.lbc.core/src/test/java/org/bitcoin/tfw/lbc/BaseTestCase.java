@@ -1,13 +1,13 @@
+package org.bitcoin.tfw.lbc;
 import java.nio.file.Files;
 
+import org.bitcoin.tfw.lbc.LTBCMainTestCase;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.RegTestParams;
 import org.junit.Assert;
 import org.junit.Test;
-
-import se.h3.fs.bitcoin.ltbc.LTBCMainTestCase;
 
 public class BaseTestCase extends LTBCMainTestCase {
 
