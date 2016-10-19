@@ -20,5 +20,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.bitcoin.tfw.lbc.core</module>
+		<module>org.bitcoin.tfw.lbc.webapp</module>
 	</modules>
 </project>
