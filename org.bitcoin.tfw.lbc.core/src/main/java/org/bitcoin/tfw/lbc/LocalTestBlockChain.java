@@ -89,7 +89,7 @@ public class LocalTestBlockChain {
 			// StandardCopyOption.REPLACE_EXISTING);
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -121,7 +121,7 @@ public class LocalTestBlockChain {
 			}).start();
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -131,8 +131,7 @@ public class LocalTestBlockChain {
 		try {
 			deamon.waitFor();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -144,11 +143,9 @@ public class LocalTestBlockChain {
 
 			cli.waitFor();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			throw new RuntimeException(e);		}
 	}
 
 	public void mine(int blocks) {
