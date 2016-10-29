@@ -57,7 +57,4 @@ public class LocalBlockChainResource {
 		ltbc.sendto(addr, val);
 		return Response.ok("Sentind " + val + "to " + addr).build();
 	}
-
-
-
 }
