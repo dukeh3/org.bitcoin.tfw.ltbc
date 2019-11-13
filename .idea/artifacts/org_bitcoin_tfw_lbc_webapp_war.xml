@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="org.bitcoin.tfw.lbc.webapp:war">
+    <output-path>$PROJECT_DIR$/org.bitcoin.tfw.lbc.webapp/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>org.bitcoin.tfw.lbc.webapp</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="org.bitcoin.tfw.lbc.webapp-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="org.bitcoin.tfw.lbc.webapp:war exploded" />
+    </root>
+  </artifact>
+</component>
