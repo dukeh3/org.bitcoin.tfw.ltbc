@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bitcoinj.core.Address;
+import org.bitcoinj.core.LegacyAddress;
 import org.bitcoinj.params.RegTestParams;
 
 public class LocalTestBlockChain {
@@ -123,7 +124,7 @@ public class LocalTestBlockChain {
 
             }).start();
 
-            address = new Address(RegTestParams.get(), getNewAddress());
+            address = LegacyAddress.fromBase58(RegTestParams.get(), getNewAddress());
             logger.log(Level.FINEST, "Default address set to: " + address);
 
         } catch (Exception e) {

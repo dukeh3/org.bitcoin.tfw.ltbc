@@ -11,16 +11,16 @@ public class BlockChainTestClient {
 	public WalletAppKit kit;
 	
 	public BlockChainTestClient() {
-		try {
-			
-			NetworkParameters np = RegTestParams.get();
-			kit = new WalletAppKit(np, Files.createTempDirectory("wallet").toFile(), "dat");
-			kit.startAsync().awaitRunning();
-			kit.peerGroup().connectToLocalHost();
-
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
+//		try {
+//
+//			NetworkParameters np = RegTestParams.get();
+//			kit = new WalletAppKit(np, Files.createTempDirectory("wallet").toFile(), "dat");
+////			kit.startAsync().awaitRunning();
+//			kit.peerGroup().connectToLocalHost();
+//
+//		} catch (IOException e) {
+//			throw new RuntimeException(e);
+//		}
+//
 	}
 }

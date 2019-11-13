@@ -38,17 +38,21 @@
           </element>
           <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-core:2.12.1" />
           <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-api:2.12.1" />
-          <element id="library" level="project" name="Maven: org.bitcoinj:bitcoinj-core:0.13.2" />
-          <element id="library" level="project" name="Maven: com.madgag.spongycastle:core:1.51.0.0" />
-          <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:2.5.0" />
-          <element id="library" level="project" name="Maven: com.google.guava:guava:16.0.1" />
-          <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:2.0.1" />
+          <element id="library" level="project" name="Maven: org.bitcoinj:bitcoinj-core:0.15.5" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk15to18:1.63" />
+          <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.6.1" />
+          <element id="library" level="project" name="Maven: com.google.guava:guava:27.1-android" />
+          <element id="library" level="project" name="Maven: com.google.guava:failureaccess:1.0.1" />
+          <element id="library" level="project" name="Maven: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" />
+          <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:3.0.2" />
+          <element id="library" level="project" name="Maven: org.checkerframework:checker-compat-qual:2.5.2" />
+          <element id="library" level="project" name="Maven: com.google.errorprone:error_prone_annotations:2.2.0" />
+          <element id="library" level="project" name="Maven: com.google.j2objc:j2objc-annotations:1.1" />
+          <element id="library" level="project" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.17" />
+          <element id="library" level="project" name="Maven: com.squareup.okhttp3:okhttp:3.12.3" />
+          <element id="library" level="project" name="Maven: com.squareup.okio:okio:1.15.0" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.28" />
           <element id="library" level="project" name="Maven: net.jcip:jcip-annotations:1.0" />
-          <element id="library" level="project" name="Maven: com.lambdaworks:scrypt:1.4.0" />
-          <element id="library" level="project" name="Maven: org.bitcoinj:orchid:1.1.1" />
-          <element id="library" level="project" name="Maven: com.squareup.okhttp:okhttp:2.2.0" />
-          <element id="library" level="project" name="Maven: com.squareup.okio:okio:1.2.0" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.7" />
         </element>
       </element>
       <element id="directory" name="META-INF">
