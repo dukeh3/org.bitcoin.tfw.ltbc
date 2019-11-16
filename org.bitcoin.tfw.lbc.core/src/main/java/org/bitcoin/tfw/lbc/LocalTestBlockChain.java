@@ -1,20 +1,22 @@
 package org.bitcoin.tfw.lbc;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.LegacyAddress;
 import org.bitcoinj.params.RegTestParams;
 
 public class LocalTestBlockChain {
-    final static Logger logger = Logger.getLogger(LocalTestBlockChain.class.getName());
-
+    private static final Logger logger = LogManager.getLogger();
 
     class SystemProfile {
         String deamon;
@@ -84,7 +86,7 @@ public class LocalTestBlockChain {
 
             profile = new SystemProfile(td.resolve(dfn) + conf, td.resolve(cfn) + conf);
 
-            logger.log(Level.FINEST, "Using tempdir: " + td);
+            logger.debug("Using tempdir: " + td);
 
             // Files.copy(Thread.currentThread().getContextClassLoader()
             // .getResourceAsStream(profile.deamon),
@@ -103,21 +105,54 @@ public class LocalTestBlockChain {
 
     private boolean keepAlive = false;
 
+    private Thread dist;
+    private Thread dest;
+
     public void startDeamon() {
         try {
             keepAlive = true;
             deamon = Runtime.getRuntime().exec(profile.deamon);
 
+            dist = new Thread(() -> {
+                try {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(deamon.getInputStream()));
+
+                    while (keepAlive)
+                        logger.debug(br.readLine());
+
+                } catch (IOException e) {
+                    logger.warn(e);
+                }
+            });
+            dist.start();
+
+            dest = new Thread(() -> {
+                try {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(deamon.getErrorStream()));
+
+                    while (keepAlive)
+                        logger.warn(br.readLine());
+
+                } catch (IOException e) {
+                    logger.warn(e);
+                }
+            });
+            dest.start();
+
+
             new Thread(() -> {
                 try {
                     if (!deamon.isAlive()) {
-                        logger.log(Level.WARNING, "Deamon is live");
+                        logger.warn("Deamon is live");
                     }
+
 
                     int ret = deamon.waitFor();
                     if (keepAlive) {
                         throw new RuntimeException("Deamon dead while keepAlive set to true, exitcode: " + ret);
                     }
+
+
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -125,7 +160,7 @@ public class LocalTestBlockChain {
             }).start();
 
             address = LegacyAddress.fromBase58(RegTestParams.get(), getNewAddress());
-            logger.log(Level.FINEST, "Default address set to: " + address);
+            logger.debug("Default address set to: " + address);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -134,7 +169,12 @@ public class LocalTestBlockChain {
 
     public void stopDeaomn() {
         keepAlive = false;
+
+        dist.interrupt();
+        dest.interrupt();
+
         deamon.destroy();
+
         try {
             deamon.waitFor();
         } catch (InterruptedException e) {
@@ -155,7 +195,7 @@ public class LocalTestBlockChain {
     byte[] cli_call(String call) {
         try {
             String command = profile.cli + "-rpcwait " + call;
-            logger.log(Level.FINE, command);
+            logger.debug(command);
             Process cli = Runtime.getRuntime().exec(command);
 
             int result = cli.waitFor();

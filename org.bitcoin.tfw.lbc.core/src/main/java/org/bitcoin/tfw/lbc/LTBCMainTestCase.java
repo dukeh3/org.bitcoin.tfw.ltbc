@@ -11,8 +11,14 @@ import org.junit.Before;
 
 public class LTBCMainTestCase extends LTBCTestCase {
 
+    final boolean startDeamon;
+
     public LTBCMainTestCase() {
-        super();
+        this(true);
+    }
+
+    public LTBCMainTestCase(boolean startDeamon) {
+        this.startDeamon = startDeamon;
     }
 
     static protected void delete(File f) throws IOException {
@@ -43,8 +49,10 @@ public class LTBCMainTestCase extends LTBCTestCase {
                 delete(f);
             f.mkdir();
 
-            tbc.startDeamon();
-            tbc.mine(101);
+            if(startDeamon) {
+                tbc.startDeamon();
+                tbc.mine(101);
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
