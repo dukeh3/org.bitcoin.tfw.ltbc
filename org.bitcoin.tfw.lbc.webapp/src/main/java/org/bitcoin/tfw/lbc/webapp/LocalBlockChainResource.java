@@ -4,7 +4,6 @@ import javax.inject.Singleton;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -29,7 +28,7 @@ public class LocalBlockChainResource {
 	@Produces("text/plain")
 	public Response start() {
 		
-		ltbc.startDeamon();
+		ltbc.startDaemon();
 		return Response.ok("Started").build();
 	}
 	
@@ -38,8 +37,8 @@ public class LocalBlockChainResource {
 	@Produces("text/plain")
 	public Response stop() {
 		
-		ltbc.stopDeaomn();
-		return Response.ok("Stoped").build();
+		ltbc.stopDaemon();
+		return Response.ok("Stopped").build();
 	}
 	
 	@GET
@@ -53,8 +52,8 @@ public class LocalBlockChainResource {
 	@GET
 	@Path("/sendto")
 	@Produces("text/plain")
-	public Response sendto(@QueryParam("val") Double val, @QueryParam("addr") String addr) {
-		ltbc.sendto(addr, val);
+	public Response sendTo(@QueryParam("val") Double val, @QueryParam("addr") String addr) {
+		ltbc.sendTo(addr, val);
 		return Response.ok("Sentind " + val + "to " + addr).build();
 	}
 }

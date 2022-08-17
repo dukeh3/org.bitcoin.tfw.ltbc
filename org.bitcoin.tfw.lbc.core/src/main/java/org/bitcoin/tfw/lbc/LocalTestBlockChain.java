@@ -1,6 +1,5 @@
 package org.bitcoin.tfw.lbc;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,26 +18,29 @@ import org.bitcoinj.params.RegTestParams;
 public class LocalTestBlockChain {
     private static final Logger logger = LogManager.getLogger();
 
-    class SystemProfile {
-        String deamon;
+    final String BITCOIN_VERSION = "0.18.1";
+    // final String BITCOIN_VERSION = "0.19.1";
+    // final String BITCOIN_VERSION = "0.21.2";
+    // final String BITCOIN_VERSION = "23.0";
+
+    static class SystemProfile {
+        String daemon;
         String cli;
 
-        public SystemProfile(String deamon, String cli) {
+        public SystemProfile(String daemon, String cli) {
             super();
-            this.deamon = deamon;
+            this.daemon = daemon;
             this.cli = cli;
         }
     }
 
     SystemProfile profile;
-    Process deamon;
+    Process daemon;
 
     public LocalTestBlockChain() {
         // Create a temporary directory to store stuff
 
         try {
-            final String BITCOIN_VERSION = "0.18.1";
-
             Path td = Files.createTempDirectory("lbct");
 
             final String cn = "bitcoin.conf";
@@ -47,10 +50,10 @@ public class LocalTestBlockChain {
             String archProp = System.getProperty("os.arch");
 
             String conf = " -datadir=" + td + " -conf=" + cp + " -regtest ";
-            String dfn = null;
-            String cfn = null;
+            String dfn;
+            String cfn;
 
-            Path ar = null;
+            Path ar;
 
             if (os.startsWith("Linux")) {
 
@@ -73,15 +76,15 @@ public class LocalTestBlockChain {
             // + conf);
             // }
 
-            Files.copy(Thread.currentThread().getContextClassLoader().getResourceAsStream(cn), cp,
+            Files.copy(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(cn)), cp,
                     StandardCopyOption.REPLACE_EXISTING);
 
             for (String s : new String[]{dfn, cfn}) {
                 Path path = td.resolve(s);
-                Files.copy(Thread.currentThread().getContextClassLoader().getResourceAsStream(ar.resolve(s).toString()),
+                Files.copy(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(ar.resolve(s).toString())),
                         path, StandardCopyOption.REPLACE_EXISTING);
 
-                path.toFile().setExecutable(true);
+                if (!path.toFile().setExecutable(true)) throw new RuntimeException("Setting Executable failed");
             }
 
             profile = new SystemProfile(td.resolve(dfn) + conf, td.resolve(cfn) + conf);
@@ -108,14 +111,18 @@ public class LocalTestBlockChain {
     private Thread dist;
     private Thread dest;
 
-    public void startDeamon() {
+    public boolean isDaemonAlive() {
+        return daemon != null && daemon.isAlive();
+    }
+
+    public void startDaemon() {
         try {
             keepAlive = true;
-            deamon = Runtime.getRuntime().exec(profile.deamon);
+            daemon = Runtime.getRuntime().exec(profile.daemon);
 
             dist = new Thread(() -> {
                 try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(deamon.getInputStream()));
+                    BufferedReader br = new BufferedReader(new InputStreamReader(daemon.getInputStream()));
 
                     while (keepAlive)
                         logger.debug(br.readLine());
@@ -128,7 +135,7 @@ public class LocalTestBlockChain {
 
             dest = new Thread(() -> {
                 try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(deamon.getErrorStream()));
+                    BufferedReader br = new BufferedReader(new InputStreamReader(daemon.getErrorStream()));
 
                     while (keepAlive)
                         logger.warn(br.readLine());
@@ -142,41 +149,42 @@ public class LocalTestBlockChain {
 
             new Thread(() -> {
                 try {
-                    if (!deamon.isAlive()) {
-                        logger.warn("Deamon is live");
+                    if (!daemon.isAlive()) {
+                        logger.warn("Daemon is live");
                     }
 
-
-                    int ret = deamon.waitFor();
+                    int ret = daemon.waitFor();
                     if (keepAlive) {
-                        throw new RuntimeException("Deamon dead while keepAlive set to true, exitcode: " + ret);
+                        throw new RuntimeException("Daemon dead while keepAlive set to true, exitcode: " + ret);
                     }
-
-
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
             }).start();
 
-            address = LegacyAddress.fromBase58(RegTestParams.get(), getNewAddress());
-            logger.debug("Default address set to: " + address);
-
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
-    public void stopDeaomn() {
+    public void setDefaultAddress() {
+        // TODO: This should be activated with v 23.0
+//            createWallet("test_wallet");
+        defaultAddress = LegacyAddress.fromBase58(RegTestParams.get(), getNewAddress());
+        logger.debug("Default address set to: " + defaultAddress);
+    }
+
+    public void stopDaemon() {
         keepAlive = false;
 
         dist.interrupt();
         dest.interrupt();
 
-        deamon.destroy();
+        daemon.destroy();
 
         try {
-            deamon.waitFor();
+            daemon.waitFor();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -184,15 +192,15 @@ public class LocalTestBlockChain {
 
     static class FailedCall extends RuntimeException {
         final int result;
-        final byte[] stfderr;
+        final byte[] stderr;
 
-        public FailedCall(int result, byte[] stfderr) {
+        public FailedCall(int result, byte[] stderr) {
             this.result = result;
-            this.stfderr = stfderr;
+            this.stderr = stderr;
         }
     }
 
-    byte[] cli_call(String call) {
+    byte[] cliCall(String call) {
         try {
             String command = profile.cli + "-rpcwait " + call;
             logger.debug(command);
@@ -201,6 +209,7 @@ public class LocalTestBlockChain {
             int result = cli.waitFor();
 
             if (result != 0) {
+                logger.warn("CLI command failed with result: " + result);
                 throw new FailedCall(result, cli.getErrorStream().readAllBytes());
             }
 
@@ -210,27 +219,31 @@ public class LocalTestBlockChain {
         }
     }
 
-    private Address address;
+    private Address defaultAddress;
+
+    public void createWallet(String name) {
+        cliCall("createwallet " + name);
+    }
 
     public void mine(int blocks) {
-        mineto(blocks, address);
+        mineTo(blocks, defaultAddress);
     }
 
-    public void mineto(int blocks, Address address) {
-        cli_call("generatetoaddress " + blocks + " " + address);
+    public void mineTo(int blocks, Address address) {
+        cliCall("generatetoaddress " + blocks + " " + address);
     }
 
-    public void sendto(String addr, double val) {
-        cli_call("sendtoaddress " + addr + " " + val);
+    public void sendTo(String address, double val) {
+        cliCall("sendtoaddress " + address + " " + val);
     }
 
-    public void sendto(Address addr, double val) {
-        cli_call("sendtoaddress " + addr + " " + val);
+    public void sendTo(Address address, double val) {
+        cliCall("sendtoaddress " + address + " " + val);
     }
 
+    //TODO This could be the balrog
     public String getNewAddress() {
-        return new String(cli_call("getnewaddress test legacy")).trim();
+        return new String(cliCall("getnewaddress test legacy")).trim();
     }
-
 
 }

@@ -4,21 +4,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.params.RegTestParams;
 import org.junit.After;
 import org.junit.Before;
 
 public class LTBCMainTestCase extends LTBCTestCase {
 
-    final boolean startDeamon;
+    final boolean startDaemon;
 
     public LTBCMainTestCase() {
         this(true);
     }
 
-    public LTBCMainTestCase(boolean startDeamon) {
-        this.startDeamon = startDeamon;
+    public LTBCMainTestCase(boolean startDaemon) {
+        this.startDaemon = startDaemon;
     }
 
     static protected void delete(File f) throws IOException {
@@ -49,9 +47,12 @@ public class LTBCMainTestCase extends LTBCTestCase {
                 delete(f);
             f.mkdir();
 
-            if(startDeamon) {
-                tbc.startDeamon();
+            if (startDaemon) {
+                tbc.startDaemon();
+                tbc.setDefaultAddress();
                 tbc.mine(101);
+            } else {
+                tbc.setDefaultAddress();
             }
 
         } catch (Exception e) {
@@ -62,6 +63,8 @@ public class LTBCMainTestCase extends LTBCTestCase {
 
     @After
     public void teardown() {
-        tbc.stopDeaomn();
+        if (startDaemon) {
+            tbc.stopDaemon();
+        }
     }
 }
