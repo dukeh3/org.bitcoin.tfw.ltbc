@@ -9,14 +9,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.LegacyAddress;
 import org.bitcoinj.params.RegTestParams;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 public class LocalTestBlockChain {
-    private static final Logger logger = LogManager.getLogger();
+    //    private static final Logger log = LogManager.getLogger();
+    Logger log = LoggerFactory.getLogger(LocalTestBlockChain.class);
 
     final String BITCOIN_VERSION = "0.18.1";
     // final String BITCOIN_VERSION = "0.19.1";
@@ -89,7 +92,7 @@ public class LocalTestBlockChain {
 
             profile = new SystemProfile(td.resolve(dfn) + conf, td.resolve(cfn) + conf);
 
-            logger.debug("Using tempdir: " + td);
+            log.debug("Using tempdir: " + td);
 
             // Files.copy(Thread.currentThread().getContextClassLoader()
             // .getResourceAsStream(profile.deamon),
@@ -125,10 +128,10 @@ public class LocalTestBlockChain {
                     BufferedReader br = new BufferedReader(new InputStreamReader(daemon.getInputStream()));
 
                     while (keepAlive)
-                        logger.debug(br.readLine());
+                        log.debug(br.readLine());
 
                 } catch (IOException e) {
-                    logger.warn(e);
+                    log.warn("", e);
                 }
             });
             dist.start();
@@ -138,10 +141,10 @@ public class LocalTestBlockChain {
                     BufferedReader br = new BufferedReader(new InputStreamReader(daemon.getErrorStream()));
 
                     while (keepAlive)
-                        logger.warn(br.readLine());
+                        log.warn(br.readLine());
 
                 } catch (IOException e) {
-                    logger.warn(e);
+                    log.warn("", e);
                 }
             });
             dest.start();
@@ -150,7 +153,7 @@ public class LocalTestBlockChain {
             new Thread(() -> {
                 try {
                     if (!daemon.isAlive()) {
-                        logger.warn("Daemon is live");
+                        log.warn("Daemon is live");
                     }
 
                     int ret = daemon.waitFor();
@@ -172,7 +175,7 @@ public class LocalTestBlockChain {
         // TODO: This should be activated with v 23.0
 //            createWallet("test_wallet");
         defaultAddress = LegacyAddress.fromBase58(RegTestParams.get(), getNewAddress());
-        logger.debug("Default address set to: " + defaultAddress);
+        log.debug("Default address set to: " + defaultAddress);
     }
 
     public void stopDaemon() {
@@ -203,13 +206,13 @@ public class LocalTestBlockChain {
     byte[] cliCall(String call) {
         try {
             String command = profile.cli + "-rpcwait " + call;
-            logger.debug(command);
+            log.debug(command);
             Process cli = Runtime.getRuntime().exec(command);
 
             int result = cli.waitFor();
 
             if (result != 0) {
-                logger.warn("CLI command failed with result: " + result);
+                log.warn("CLI command failed with result: " + result);
                 throw new FailedCall(result, cli.getErrorStream().readAllBytes());
             }
 
