@@ -131,7 +131,8 @@ public class LocalTestBlockChain {
                         log.debug(br.readLine());
 
                 } catch (IOException e) {
-                    log.warn("", e);
+                    if (keepAlive)
+                        log.warn("InputStream closed with exception", e);
                 }
             });
             dist.start();
@@ -144,7 +145,8 @@ public class LocalTestBlockChain {
                         log.warn(br.readLine());
 
                 } catch (IOException e) {
-                    log.warn("", e);
+                    if (keepAlive)
+                        log.warn("ErrorStream closed with exception", e);
                 }
             });
             dest.start();
@@ -233,8 +235,13 @@ public class LocalTestBlockChain {
     }
 
     public void mineTo(int blocks, Address address) {
+        mineTo(blocks, address.toString());
+    }
+
+    public void mineTo(int blocks, String address) {
         cliCall("generatetoaddress " + blocks + " " + address);
     }
+
 
     public void sendTo(String address, double val) {
         cliCall("sendtoaddress " + address + " " + val);
