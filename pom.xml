@@ -2,19 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.bitcoin</groupId>
-	<artifactId>org.bitcoin.tfw.lbc</artifactId>
+	<artifactId>org.bitcoin.tfw.ltbc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-		</dependency>
-	</dependencies>
+
 	<packaging>pom</packaging>
 	<modules>
-		<module>org.bitcoin.tfw.lbc.core</module>
-		<module>org.bitcoin.tfw.lbc.sba</module>
-		<module>org.bitcoin.tfw.lbc.webapp</module>
+		<module>org.bitcoin.tfw.ltbc.core</module>
+		<module>org.bitcoin.tfw.ltbc.sba</module>
 	</modules>
 </project>

@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bitcoin</groupId>
-			<artifactId>org.bitcoin.tfw.lbc.core</artifactId>
+			<artifactId>core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
