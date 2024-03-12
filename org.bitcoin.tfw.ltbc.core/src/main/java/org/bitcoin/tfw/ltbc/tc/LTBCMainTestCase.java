@@ -41,6 +41,7 @@ public class LTBCMainTestCase extends LTBCTestCase {
      */
     @BeforeEach
     public void Setup() {
+
         File f = new File("tmp");
 
         try {

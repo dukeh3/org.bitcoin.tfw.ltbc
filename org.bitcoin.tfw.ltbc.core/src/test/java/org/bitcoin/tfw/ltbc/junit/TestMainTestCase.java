@@ -1,13 +1,14 @@
 package org.bitcoin.tfw.ltbc.junit;
 
-import java.nio.file.Files;
-
 import org.bitcoin.tfw.ltbc.tc.LTBCMainTestCase;
-import org.bitcoinj.core.*;
+import org.bitcoinj.core.Address;
+import org.bitcoinj.core.Coin;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.RegTestParams;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.nio.file.Files;
 
 public class TestMainTestCase extends LTBCMainTestCase {
 
@@ -16,7 +17,6 @@ public class TestMainTestCase extends LTBCMainTestCase {
 
         WalletAppKit kit = new WalletAppKit(RegTestParams.get(), Files
                 .createTempDirectory("wallet").toFile(), "dat");
-
 
         kit.connectToLocalHost();
         kit.startAsync().awaitRunning();
