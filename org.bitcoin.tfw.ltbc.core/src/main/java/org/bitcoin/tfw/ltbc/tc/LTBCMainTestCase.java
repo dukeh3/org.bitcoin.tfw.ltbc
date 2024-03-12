@@ -1,11 +1,12 @@
-package org.bitcoin.tfw.ltbc;
+package org.bitcoin.tfw.ltbc.tc;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.junit.After;
-import org.junit.Before;
 
 public class LTBCMainTestCase extends LTBCTestCase {
 
@@ -38,8 +39,8 @@ public class LTBCMainTestCase extends LTBCTestCase {
     /**
      *
      */
-    @Before
-    public void setup() {
+    @BeforeEach
+    public void Setup() {
         File f = new File("tmp");
 
         try {
@@ -48,11 +49,11 @@ public class LTBCMainTestCase extends LTBCTestCase {
             f.mkdir();
 
             if (startDaemon) {
-                tbc.startDaemon();
-                tbc.setDefaultAddress();
-                tbc.mine(101);
+                ltbc.startDaemon();
+                ltbc.setDefaultAddress();
+                ltbc.mine(101);
             } else {
-                tbc.setDefaultAddress();
+                ltbc.setDefaultAddress();
             }
 
         } catch (Exception e) {
@@ -61,10 +62,10 @@ public class LTBCMainTestCase extends LTBCTestCase {
 
     }
 
-    @After
-    public void teardown() {
+    @AfterEach
+    public void Teardown() {
         if (startDaemon) {
-            tbc.stopDaemon();
+            ltbc.stopDaemon();
         }
     }
 }

@@ -2,14 +2,14 @@ package org.bitcoin.tfw.ltbc.junit;
 
 import java.nio.file.Files;
 
-import org.bitcoin.tfw.ltbc.LTBCMainTestCase;
+import org.bitcoin.tfw.ltbc.tc.LTBCMainTestCase;
 import org.bitcoinj.core.*;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.RegTestParams;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-public class BaseTestCase extends LTBCMainTestCase {
+public class TestMainTestCase extends LTBCMainTestCase {
 
     @Test
     public void testReceive1BTC() throws Exception {
@@ -21,19 +21,18 @@ public class BaseTestCase extends LTBCMainTestCase {
         kit.connectToLocalHost();
         kit.startAsync().awaitRunning();
 
-
         final Address fra = kit.wallet().freshReceiveAddress();
         final int coinsToSend = 1;
 
-        Assert.assertEquals(Coin.ZERO, kit.wallet().getBalance());
+        Assertions.assertEquals(Coin.ZERO, kit.wallet().getBalance());
 
-        tbc.sendTo(fra, coinsToSend);
-        this.tbc.mine(6);
+        ltbc.sendTo(fra, coinsToSend);
+        ltbc.mine(6);
 
         // We wait for 1 second here
         Thread.sleep(1000);
 
         // TODO fix race condition here
-		Assert.assertEquals(Coin.valueOf(coinsToSend,0), kit.wallet().getBalance());
+		Assertions.assertEquals(Coin.valueOf(coinsToSend,0), kit.wallet().getBalance());
     }
 }

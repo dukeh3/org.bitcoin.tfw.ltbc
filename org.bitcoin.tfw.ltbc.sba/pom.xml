@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>org.bitcoin</groupId>
-        <artifactId>org.bitcoin.tfw.lbc</artifactId>
+        <artifactId>org.bitcoin.tfw.ltbc</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>sba</artifactId>
+    <artifactId>org.bitcoin.tfw.ltbc.sba</artifactId>
 
     <properties>
         <spring.version>3.2.3</spring.version>

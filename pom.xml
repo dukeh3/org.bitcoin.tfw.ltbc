@@ -9,5 +9,6 @@
 	<modules>
 		<module>org.bitcoin.tfw.ltbc.core</module>
 		<module>org.bitcoin.tfw.ltbc.sba</module>
-	</modules>
+        <module>org.bitcoin.tfw.ltbc.client</module>
+    </modules>
 </project>

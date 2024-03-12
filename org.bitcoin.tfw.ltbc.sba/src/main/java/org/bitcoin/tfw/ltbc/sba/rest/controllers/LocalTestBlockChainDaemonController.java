@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/lbc/daemon")
+@RequestMapping("/ltbc/daemon")
 public class LocalTestBlockChainDaemonController {
     Logger logger = LoggerFactory.getLogger(LocalTestBlockChainDaemonController.class);
     static LocalTestBlockChain ltbc = new LocalTestBlockChain();
@@ -30,6 +30,8 @@ public class LocalTestBlockChainDaemonController {
         ltbc.startDaemon();
         ltbc.setDefaultAddress();
         ltbc.mine(101);
+
+        logger.info("Started");
     }
 
     @PutMapping("/stop")

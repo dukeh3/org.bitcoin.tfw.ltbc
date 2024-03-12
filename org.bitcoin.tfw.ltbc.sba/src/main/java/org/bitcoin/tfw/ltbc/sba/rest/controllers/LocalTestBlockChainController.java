@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.bitcoin.tfw.ltbc.sba.rest.controllers.LocalTestBlockChainDaemonController.ltbc;
 
 @RestController
-@RequestMapping("/lbc/controller")
+@RequestMapping("/ltbc/controller")
 public class LocalTestBlockChainController {
     Logger logger = LoggerFactory.getLogger(LocalTestBlockChainController.class);
 
@@ -18,17 +18,21 @@ public class LocalTestBlockChainController {
     }
 
     @PutMapping("/mine")
-    public void mine(@RequestParam(defaultValue = "1", required = false) int blocks) {
+    public void mine(@RequestParam(defaultValue = "1") Integer blocks) {
+        logger.info("Mine " + blocks);
         ltbc.mine(blocks);
+        logger.info("Mined");
     }
 
     @PutMapping("/mineTo")
-    public void mineTo(@RequestParam(defaultValue = "1", required = false) int blocks, String address) {
+    public void mineTo(@RequestParam(defaultValue = "1") Integer blocks, @RequestParam() String address) {
         ltbc.mineTo(blocks, address);
     }
 
     @PutMapping("/sendTo")
-    public void send(@RequestParam(defaultValue = "1.0", required = false) double amount, @RequestParam() String address) {
+    public void send(@RequestParam(defaultValue = "1.0") Double amount, @RequestParam() String address) {
+        logger.info("Sending: " + amount + "to " + address);
         ltbc.sendTo(address, amount);
+        logger.info("Sent");
     }
 }
