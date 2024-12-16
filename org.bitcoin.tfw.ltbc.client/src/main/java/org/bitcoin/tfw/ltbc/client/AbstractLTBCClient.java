@@ -6,7 +6,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 abstract public class AbstractLTBCClient<T> {
-    T avatar;
+    public T avatar;
 
     public AbstractLTBCClient(String baseUrl, Class<T> cls) {
 

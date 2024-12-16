@@ -141,8 +141,14 @@ public class LocalTestBlockChain {
                 try {
                     BufferedReader br = new BufferedReader(new InputStreamReader(daemon.getErrorStream()));
 
-                    while (keepAlive)
-                        log.warn(br.readLine());
+                    while (keepAlive) {
+                        String line = br.readLine();
+
+                        if (line == null)
+                            throw new IOException("ErrorStream closed while keepAlive was set");
+
+                        log.warn(line);
+                    }
 
                 } catch (IOException e) {
                     if (keepAlive)
