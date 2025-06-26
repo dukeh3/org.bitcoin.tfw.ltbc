@@ -9,8 +9,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.LegacyAddress;
+//import org.bitcoinj.core.Address;
+//import org.bitcoinj.core.LegacyAddress;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.LegacyAddress;
 import org.bitcoinj.params.RegTestParams;
 
 import org.slf4j.Logger;
@@ -21,10 +23,13 @@ public class LocalTestBlockChain {
     //    private static final Logger log = LogManager.getLogger();
     Logger log = LoggerFactory.getLogger(LocalTestBlockChain.class);
 
-    final String BITCOIN_VERSION = "0.18.1";
-    // final String BITCOIN_VERSION = "0.19.1";
-    // final String BITCOIN_VERSION = "0.21.2";
-    // final String BITCOIN_VERSION = "23.0";
+//        final String BITCOIN_VERSION = "0.18.1";
+//         final String BITCOIN_VERSION = "0.19.0.1";
+//     final String BITCOIN_VERSION = "0.19.1";
+//     final String BITCOIN_VERSION = "0.21.2";
+//     final String BITCOIN_VERSION = "23.0";
+    final String BITCOIN_VERSION = "28.1";
+
 
     static class SystemProfile {
         String daemon;
@@ -181,7 +186,7 @@ public class LocalTestBlockChain {
 
     public void setDefaultAddress() {
         // TODO: This should be activated with v 23.0
-//            createWallet("test_wallet");
+        createWallet("test_wallet");
         defaultAddress = LegacyAddress.fromBase58(RegTestParams.get(), getNewAddress());
         log.debug("Default address set to: " + defaultAddress);
     }

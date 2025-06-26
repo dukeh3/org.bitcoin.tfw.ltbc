@@ -4,14 +4,14 @@
     <parent>
         <groupId>org.bitcoin</groupId>
         <artifactId>org.bitcoin.tfw.ltbc</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
     <artifactId>org.bitcoin.tfw.ltbc.client</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.bitcoin</groupId>
             <artifactId>org.bitcoin.tfw.ltbc.core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>

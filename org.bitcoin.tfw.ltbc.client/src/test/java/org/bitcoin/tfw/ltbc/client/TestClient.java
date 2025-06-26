@@ -1,7 +1,7 @@
 package org.bitcoin.tfw.ltbc.client;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Coin;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.RegTestParams;
 import org.junit.jupiter.api.Assertions;

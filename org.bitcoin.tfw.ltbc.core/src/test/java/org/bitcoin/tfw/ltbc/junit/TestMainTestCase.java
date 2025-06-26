@@ -1,8 +1,10 @@
 package org.bitcoin.tfw.ltbc.junit;
 
 import org.bitcoin.tfw.ltbc.tc.LTBCMainTestCase;
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Coin;
+//import org.bitcoinj.core.Address;
+//import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Coin;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.RegTestParams;
 import org.junit.jupiter.api.Assertions;
